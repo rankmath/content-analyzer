@@ -1,0 +1,17 @@
+version: "2"
+plugins:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+  fixme:
+    enabled: true
+ratings:
+  paths:
+    - "**.css"
+    - "**.js"
+exclude_patterns:
+- src/config/*
+- spec/**/*
+- dist/*
