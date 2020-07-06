@@ -43,16 +43,15 @@ class KeywordDensity extends Analysis {
 	getResult( paper, researcher, i18n ) {
 		/* eslint @wordpress/no-unused-vars-before-return: 0*/
 		const analysisResult = this.newResult( i18n )
-		const keywordCombination = paper.getKeywordCombination( researcher )
 		const getWordCount = researcher.getResearch( 'wordCount' )
 		const wordCount = getWordCount( paper.getTextLower() )
 
-		if ( false === wordCount || 0 === wordCount || 0 === keywordCombination.length ) {
+		if ( false === wordCount || 0 === wordCount ) {
 			return analysisResult
 		}
 
 		// Keyword Density & Focus Keyword occurrence
-		const regex = new RegExp( map( keywordCombination, escapeRegex ).join( '|' ), 'gi' )
+		const regex = new RegExp( map( [ paper.getLower( 'keyword' ) ], escapeRegex ).join( '|' ), 'gi' )
 		const count = ( cleanTagsOnly( paper.getText() ).match( regex ) || [] ).length
 		const keywordDensity = ( ( count / wordCount ) * 100 ).toFixed( 2 )
 		const calculatedScore = this.calculateScore( keywordDensity )

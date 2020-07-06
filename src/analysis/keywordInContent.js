@@ -42,7 +42,7 @@ class KeywordInContent extends Analysis {
 	getResult( paper, researcher, i18n ) {
 		const analysisResult = this.newResult( i18n )
 		const paperText = cleanTagsOnly( paper.getTextLower() )
-		const hasKeyword = paper.getKeywordCombination( researcher ).some( ( keyword ) => includes( paperText, keyword ) )
+		const hasKeyword = includes( paperText, paper.getLower( 'keyword' ) )
 
 		analysisResult
 			.setScore( this.calculateScore( hasKeyword ) )

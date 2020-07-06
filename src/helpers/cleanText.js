@@ -87,7 +87,7 @@ function stripSpaces2( text ) {
 }
 
 /**
- * Clean text strip out all html tags, entities and comments.
+ * Clean text strip out all html tags, extra spaces, entities and comments.
  *
  * @param {string} text Text to clean.
  *
@@ -101,6 +101,24 @@ export function sanitizeText( text ) {
 			stripTags,
 			stripHTMLComments,
 			stripSpaces2,
+		]
+	)( text )
+}
+
+/**
+ * Clean text strip out all html tags, entities and comments.
+ *
+ * @param {string} text Text to clean.
+ *
+ * @return {string} The clean text.
+ */
+export function sanitizeAppData( text ) {
+	return isUndefined( text ) ? '' : flow(
+		[
+			stripStyle,
+			stripScript,
+			stripTags,
+			stripHTMLComments,
 		]
 	)( text )
 }
