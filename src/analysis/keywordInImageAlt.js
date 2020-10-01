@@ -40,8 +40,19 @@ class KeywordInImageAlt extends Analysis {
 	 */
 	getResult( paper, researcher, i18n ) {
 		const analysisResult = this.newResult( i18n )
+		const thumbnailAlt = paper.getLower( 'thumbnailAlt' )
+		let keyword = paper.getLower( 'keyword' )
+
+		if ( keyword === thumbnailAlt ) {
+			analysisResult
+				.setScore( this.calculateScore( true ) )
+				.setText( this.translateScore( analysisResult, i18n ) )
+
+			return analysisResult
+		}
+
 		// Remove duplicate words from keyword.
-		const keyword = uniq( paper.getLower( 'keyword' ).split( ' ' ) ).join( ' ' )
+		keyword = uniq( keyword.split( ' ' ) ).join( ' ' )
 		const keywordPattern = keyword.replace( /[.*+?^${}()|[\]\\]/g, '\\$&' ).replace( / /g, '.*' )
 
 		let regex = new RegExp( '<img[^>]*alt=[\'"][^\'"]*' + keywordPattern + '[^\'"]*[\'"]', 'gi' )
