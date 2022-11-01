@@ -95,6 +95,7 @@ class TitleSentiment extends Analysis {
 		return analysisResult.hasScore() ?
 			i18n.__( 'Your title has a positive or a negative sentiment.', 'rank-math' ) :
 			i18n.sprintf(
+				/* Translators: placeholder is the words "positive or a negative sentiment" as a link to the corresponding KB article. */
 				i18n.__( 'Your title doesn\'t contain a %1$s word.', 'rank-math' ),
 				'<a href="https://rankmath.com/kb/score-100-in-tests/#sentiment-in-a-title" target="_blank">positive or a negative sentiment</a>'
 			)

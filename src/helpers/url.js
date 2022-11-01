@@ -170,8 +170,11 @@ export function getLinkType( text, url ) {
  */
 export function checkNofollow( anchorHTML, linkType ) {
 	anchorHTML = anchorHTML.toLowerCase()
+	if ( includes( anchorHTML, 'dofollow' ) ) {
+		return 'Dofollow'
+	}
 
-	if ( 'internal' !== linkType && rankMath.noFollowExternalLinks && ! includes( anchorHTML, 'rel=' ) ) {
+	if ( 'internal' !== linkType && rankMath.noFollowExternalLinks && ! includes( anchorHTML, 'nofollow' ) ) {
 		return couldBeDoFollow( getFromAnchorTag( anchorHTML ) ) ? 'Dofollow' : 'Nofollow'
 	}
 
@@ -190,5 +193,5 @@ export function checkNofollow( anchorHTML, linkType ) {
  * @return {Array} Found anchor tags.
  */
 export function getLinks( text ) {
-	return text.match( /<a(?:[^>]+)?>/gi )
+	return text.match( /<a [^>]*href=([\"'])[a-z/]([^\"']+)[^>]*>/gi ) || []
 }

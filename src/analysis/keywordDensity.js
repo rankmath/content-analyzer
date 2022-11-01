@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { map, inRange } from 'lodash'
+import { map, inRange, isEmpty } from 'lodash'
 
 /**
  * WordPress dependencies
@@ -45,15 +45,16 @@ class KeywordDensity extends Analysis {
 		const analysisResult = this.newResult( i18n )
 		const getWordCount = researcher.getResearch( 'wordCount' )
 		const wordCount = getWordCount( paper.getTextLower() )
+		const keywords = paper.get( 'keywords' )
 
-		if ( false === wordCount || 0 === wordCount ) {
+		if ( false === wordCount || 0 === wordCount || isEmpty( keywords ) ) {
 			return analysisResult
 		}
 
 		// Keyword Density & Focus Keyword occurrence
-		const regex = new RegExp( map( [ paper.getLower( 'keyword' ) ], escapeRegex ).join( '|' ), 'gi' )
+		const regex = new RegExp( map( keywords, escapeRegex ).join( '|' ), 'gi' )
 		const count = ( cleanTagsOnly( paper.getText() ).match( regex ) || [] ).length
-		const keywordDensity = ( ( count / wordCount ) * 100 ).toFixed( 2 )
+		const keywordDensity = applyFilters( 'rankMath_analysis_keywordDensity', ( ( count / wordCount ) * 100 ).toFixed( 2 ), count )
 		const calculatedScore = this.calculateScore( keywordDensity )
 
 		analysisResult
@@ -90,13 +91,16 @@ class KeywordDensity extends Analysis {
 	 */
 	translateScore( type, i18n ) {
 		if ( 'low' === type ) {
+			/* Translators: 1: keyword density number, 2: number of times the Focus Keyword appears in he content. */
 			return i18n.__( 'Keyword Density is %1$s which is low, the Focus Keyword and combination appears %2$s times.', 'rank-math' )
 		}
 
 		if ( 'high' === type ) {
+			/* Translators: 1: keyword density number, 2: number of times the Focus Keyword appears in he content. */
 			return i18n.__( 'Keyword Density is %1$s which is high, the Focus Keyword and combination appears %2$s times.', 'rank-math' )
 		}
 
+		/* Translators: 1: keyword density number, 2: number of times the Focus Keyword appears in he content. */
 		return i18n.__( 'Keyword Density is %1$s, the Focus Keyword and combination appears %2$s times.', 'rank-math' )
 	}
 

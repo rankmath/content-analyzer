@@ -97,6 +97,7 @@ class LinksNotAllExternals extends Analysis {
 	translateScore( analysisResult, i18n ) {
 		return analysisResult.hasScore() ?
 			i18n.__( 'At least one external link with DoFollow found in your content.', 'rank-math' ) :
+			/* Translators: placeholder is the number of links. */
 			i18n.__( 'We found %1$d outbound links in your content and all of them are nofollow.', 'rank-math' )
 	}
 }

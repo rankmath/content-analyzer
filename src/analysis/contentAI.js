@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { isUndefined, startCase } from 'lodash'
+
+/**
  * WordPress dependencies
  */
 import { applyFilters } from '@wordpress/hooks'
@@ -6,10 +11,11 @@ import { applyFilters } from '@wordpress/hooks'
 /**
  * Internal dependencies
  */
+import links from '@config/links'
 import Analysis from '@root/Analysis'
 import AnalysisResult from '@root/AnalysisResult'
 
-class LengthPermalink extends Analysis {
+class ContentAI extends Analysis {
 	/**
 	 * Create new analysis result instance.
 	 *
@@ -18,10 +24,17 @@ class LengthPermalink extends Analysis {
 	 * @return {AnalysisResult} New instance.
 	 */
 	newResult( i18n ) {
+		const postType = ! isUndefined( rankMath.postType ) ? startCase( rankMath.postType ) : 'Post'
 		return new AnalysisResult()
 			.setMaxScore( this.getScore() )
-			.setEmpty( i18n.__( 'URL unavailable. Add a short URL.', 'rank-math' ) )
-			.setTooltip( i18n.__( 'Permalink should be at most 75 characters long.', 'rank-math' ) )
+			.setEmpty( 
+				i18n.sprintf(
+					/* Translators: 1) Placeholder expands to "Content AI" with a link to the corresponding KB article. 2) Post Type. */
+					i18n.__( 'Use %1$s to optimise the  %2$s.', 'rank-math' ),
+					'<a class="rank-math-open-contentai" href="' + links.contentAILink + '" target="_blank">Content AI</a>',
+					postType
+				)
+			)
 	}
 
 	/**
@@ -35,16 +48,10 @@ class LengthPermalink extends Analysis {
 	 */
 	getResult( paper, researcher, i18n ) {
 		const analysisResult = this.newResult( i18n )
-		const permalinkLength = paper.getUrl().length
-
+		const hasContentAI = false !== paper.get( 'contentAI' )
 		analysisResult
-			.setScore( this.calculateScore( permalinkLength ) )
-			.setText(
-				i18n.sprintf(
-					this.translateScore( analysisResult, i18n ),
-					permalinkLength
-				)
-			)
+			.setScore( this.calculateScore( hasContentAI ) )
+			.setText( this.translateScore( analysisResult, i18n ) )
 
 		return analysisResult
 	}
@@ -57,18 +64,18 @@ class LengthPermalink extends Analysis {
 	 * @return {boolean} True when requirements meet.
 	 */
 	isApplicable( paper ) {
-		return paper.hasUrl()
+		return false !== paper.get( 'contentAI' )
 	}
 
 	/**
 	 * Calculates the score based on the url length.
 	 *
-	 * @param {number} permalinkLength Length of Url to run the analysis on.
+	 * @param {boolean} hasContentAI Title has number or not.
 	 *
 	 * @return {number} The calculated score.
 	 */
-	calculateScore( permalinkLength ) {
-		return 75 < permalinkLength ? null : this.getScore()
+	calculateScore( hasContentAI ) {
+		return hasContentAI ? this.getScore() : null
 	}
 
 	/**
@@ -77,7 +84,7 @@ class LengthPermalink extends Analysis {
 	 * @return {number} Max score an analysis has
 	 */
 	getScore() {
-		return applyFilters( 'rankMath_analysis_permalinkLength_score', 4 )
+		return applyFilters( 'rankMath_analysis_contentAI', 5 )
 	}
 
 	/**
@@ -89,12 +96,21 @@ class LengthPermalink extends Analysis {
 	 * @return {string} The translated string.
 	 */
 	translateScore( analysisResult, i18n ) {
+		const postType = ! isUndefined( rankMath.postType ) ? startCase( rankMath.postType ) : 'Post'
 		return analysisResult.hasScore() ?
-			/* Translators: The placeholder is the number of characters. */
-			i18n.__( 'URL is %1$d characters long. Kudos!', 'rank-math' ) :
-			/* Translators: The placeholder is the number of characters. */
-			i18n.__( 'URL is %1$d characters long. Consider shortening it.', 'rank-math' )
+			i18n.sprintf(
+				/* Translators: 1. Placeholder expands to "Content AI" with a link to the corresponding KB article. 2. Post Type. */
+				i18n.__( 'You are using %1$s to optimise this %2$s.', 'rank-math' ),
+				'<a href="' + links.contentAILink + '" target="_blank">Content AI</a>',
+				postType
+			) :
+			i18n.sprintf(
+				/* Translators: 1. Placeholder expands to "Content AI" with a link to the corresponding KB article. 2. Post Type. */
+				i18n.__( 'You are not using %1$s to optimise this %2$s.', 'rank-math' ),
+				'<a class="rank-math-open-contentai" href="' + links.contentAILink + '" target="_blank">Content AI</a>',
+				postType
+			)
 	}
 }
 
-export default LengthPermalink
+export default ContentAI

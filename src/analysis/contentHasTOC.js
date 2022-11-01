@@ -85,10 +85,12 @@ class ContentHasTOC extends Analysis {
 	translateScore( analysisResult, i18n ) {
 		return analysisResult.hasScore() ?
 			i18n.sprintf(
+				/* Translators: Placeholder expands to "Table of Contents plugin" with a link to the corresponding KB article. */
 				i18n.__( 'You seem to be using a %1$s to break-down your text.', 'rank-math' ),
 				'<a href="' + links.tocKbLink + '" target="_blank">Table of Contents plugin</a>'
 			) :
 			i18n.sprintf(
+				/* Translators: Placeholder expands to "Table of Contents plugin" with a link to the corresponding KB article. */
 				i18n.__( 'You don\'t seem to be using a %1$s.', 'rank-math' ),
 				'<a href="' + links.tocKbLink + '" target="_blank">Table of Contents plugin</a>'
 			)

@@ -11,6 +11,7 @@ import stripStyle from '@helpers/stripStyles'
 import stripSpaces from '@helpers/stripSpaces'
 import stripScript from '@helpers/stripScripts'
 import normalizeQuotes from '@helpers/normalizeQuotes'
+import normalizeWhitespace from '@helpers/normalizeWhitespace'
 import stripHTMLComments from '@helpers/stripHTMLComments'
 import stripHTMLEntities from '@helpers/stripHTMLEntities'
 
@@ -24,6 +25,7 @@ import stripHTMLEntities from '@helpers/stripHTMLEntities'
 export function cleanHTML( text ) {
 	return isUndefined( text ) ? '' : flow(
 		[
+			normalizeWhitespace,
 			stripStyle,
 			stripScript,
 			stripHTMLComments,

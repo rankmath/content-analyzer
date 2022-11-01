@@ -53,7 +53,8 @@ class KeywordIn10Percent extends Analysis {
 		}
 		words = words.join( ' ' )
 
-		const hasKeyword = includes( words, paper.getLower( 'keyword' ) )
+		const keyword = getWords( paper.getLower( 'keyword' ) ).join( ' ' )
+		const hasKeyword = includes( words, keyword )
 
 		analysisResult
 			.setScore( this.calculateScore( hasKeyword ) )

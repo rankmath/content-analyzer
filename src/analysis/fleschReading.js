@@ -30,7 +30,7 @@ class FleschReading extends Analysis {
 	}
 
 	/**
-	 * Executes the assessment and return its result
+	 * Executes the assessment and return its result.
 	 *
 	 * @param {Paper}      paper      The paper to run this assessment on.
 	 * @param {Researcher} researcher The researcher used for the assessment.
@@ -47,6 +47,7 @@ class FleschReading extends Analysis {
 		analysisResult.setScore( calculatedScore.score )
 		analysisResult.setText(
 			i18n.sprintf(
+				/* Translators: 1: score points, 2. score summary. */
 				i18n.__( 'Your Flesch Readability score is %1$s and is regarded as %2$s', 'rank-math' ),
 				fleschScore,
 				calculatedScore.note

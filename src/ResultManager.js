@@ -93,8 +93,6 @@ class ResultManager {
 			total += result.getMaxScore( shortLocale )
 		} )
 
-		total = Math.min( total, 100 )
-
 		return round( ( score / total ) * 100 )
 	}
 

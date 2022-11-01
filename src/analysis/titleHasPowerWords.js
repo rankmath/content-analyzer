@@ -27,6 +27,7 @@ class TitleHasPowerWords extends Analysis {
 			.setMaxScore( this.getScore() )
 			.setEmpty(
 				i18n.sprintf(
+					/* Translators: placeholder is the words "power words" as a link to the corresponding KB article. */
 					i18n.__( 'Add %s to your title to increase CTR.', 'rank-math' ),
 					'<a href="https://rankmath.com/blog/power-words/" target="_blank">power words</a>'
 				)
@@ -111,8 +112,10 @@ class TitleHasPowerWords extends Analysis {
 	 */
 	translateScore( analysisResult, i18n ) {
 		return analysisResult.hasScore() ?
+			/* Translators: placeholder is the number of power words. */
 			i18n.__( 'Your title contains %1$d power word(s). Booyah!', 'rank-math' ) :
 			i18n.sprintf(
+				/* Translators: placeholder is the words "power word" as a link to the corresponding KB article. */
 				i18n.__( 'Your title doesn\'t contain a %1$s. Add at least one.', 'rank-math' ),
 				'<a href="https://rankmath.com/blog/power-words/" target="_blank">power word</a>'
 			)

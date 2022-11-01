@@ -9,7 +9,7 @@ import { applyFilters } from '@wordpress/hooks'
 import Analysis from '@root/Analysis'
 import AnalysisResult from '@root/AnalysisResult'
 
-class LengthPermalink extends Analysis {
+class isReviewEnabled extends Analysis {
 	/**
 	 * Create new analysis result instance.
 	 *
@@ -20,8 +20,7 @@ class LengthPermalink extends Analysis {
 	newResult( i18n ) {
 		return new AnalysisResult()
 			.setMaxScore( this.getScore() )
-			.setEmpty( i18n.__( 'URL unavailable. Add a short URL.', 'rank-math' ) )
-			.setTooltip( i18n.__( 'Permalink should be at most 75 characters long.', 'rank-math' ) )
+			.setEmpty( i18n.__( 'Reviews are disabled on this Product.', 'rank-math' ) )
 	}
 
 	/**
@@ -35,16 +34,10 @@ class LengthPermalink extends Analysis {
 	 */
 	getResult( paper, researcher, i18n ) {
 		const analysisResult = this.newResult( i18n )
-		const permalinkLength = paper.getUrl().length
-
+		const hasReview = rankMath.assessor.isReviewEnabled
 		analysisResult
-			.setScore( this.calculateScore( permalinkLength ) )
-			.setText(
-				i18n.sprintf(
-					this.translateScore( analysisResult, i18n ),
-					permalinkLength
-				)
-			)
+			.setScore( this.calculateScore( hasReview ) )
+			.setText( this.translateScore( analysisResult, i18n ) )
 
 		return analysisResult
 	}
@@ -52,23 +45,21 @@ class LengthPermalink extends Analysis {
 	/**
 	 * Checks whether paper meet analysis requirements.
 	 *
-	 * @param {Paper} paper The paper to use for the assessment.
-	 *
 	 * @return {boolean} True when requirements meet.
 	 */
-	isApplicable( paper ) {
-		return paper.hasUrl()
+	isApplicable() {
+		return rankMath.assessor.isReviewEnabled
 	}
 
 	/**
 	 * Calculates the score based on the url length.
 	 *
-	 * @param {number} permalinkLength Length of Url to run the analysis on.
+	 * @param {boolean} hasReview Title has number or not.
 	 *
 	 * @return {number} The calculated score.
 	 */
-	calculateScore( permalinkLength ) {
-		return 75 < permalinkLength ? null : this.getScore()
+	calculateScore( hasReview ) {
+		return hasReview ? this.getScore() : null
 	}
 
 	/**
@@ -77,7 +68,7 @@ class LengthPermalink extends Analysis {
 	 * @return {number} Max score an analysis has
 	 */
 	getScore() {
-		return applyFilters( 'rankMath_analysis_permalinkLength_score', 4 )
+		return applyFilters( 'rankMath_analysis_isReviewEnabled_score', 2 )
 	}
 
 	/**
@@ -90,11 +81,9 @@ class LengthPermalink extends Analysis {
 	 */
 	translateScore( analysisResult, i18n ) {
 		return analysisResult.hasScore() ?
-			/* Translators: The placeholder is the number of characters. */
-			i18n.__( 'URL is %1$d characters long. Kudos!', 'rank-math' ) :
-			/* Translators: The placeholder is the number of characters. */
-			i18n.__( 'URL is %1$d characters long. Consider shortening it.', 'rank-math' )
+			i18n.__( 'Reviews are enabled for this Product. Good Job!', 'rank-math' ) :
+			i18n.__( 'Reviews are disabled on this Product.', 'rank-math' )
 	}
 }
 
-export default LengthPermalink
+export default isReviewEnabled

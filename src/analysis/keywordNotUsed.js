@@ -105,6 +105,7 @@ class KeywordNotUsed extends Analysis {
 		return isNewKeyword ?
 			i18n.__( 'You haven\'t used this Focus Keyword before.', 'rank-math' ) :
 			i18n.sprintf(
+				/* Translators: placeholder expands to the words [already used] with a link to see the related posts. */
 				i18n.__( 'You have %1$s this Focus Keyword.', 'rank-math' ),
 				'<a target="_blank" href="' + this.changeKeywordInLink( keyword ) + '">' + i18n.__( 'already used', 'rank-math' ) + '</a>'
 			)

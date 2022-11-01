@@ -5,4 +5,4 @@
  *
  * @return {string} The manipulated text.
  */
-export default ( text ) => text.replace( /<style[^>]*>.*?<\/style>/gi, '' )
+export default ( text ) => text.replace( /<style[^>]*>([\S\s]*?)<\/style>/gim, '' )

@@ -15,6 +15,8 @@ import { cleanText, cleanHTML, cleanTagsOnly, sanitizeText, sanitizeAppData } fr
 import wordCount from '@researches/wordCount'
 import matchParagraphs from '@helpers/matchParagraphs'
 import removeDiacritics from '@helpers/removeDiacritics'
+import stripStyle from '@helpers/stripStyles'
+import stripScript from '@helpers/stripScripts'
 
 const Helpers = {
 	cleanHTML,
@@ -25,6 +27,8 @@ const Helpers = {
 	sanitizeText,
 	sanitizeAppData,
 	wordCount,
+	stripStyle,
+	stripScript
 }
 
 window.rankMathAnalyzer = {
