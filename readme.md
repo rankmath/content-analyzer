@@ -2,7 +2,7 @@ Content Analysis library used in the [Rank Math SEO](https://rankmath.com).
 
 ## Getting Started
 
-These instructions will help you to get the plugin up and running on your local machine for development and testing purposes.
+These instructions will help you to set up the library for development and testing purposes.
 
 ## ⚠️ Prerequisites
 
