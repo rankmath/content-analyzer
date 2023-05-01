@@ -14,6 +14,7 @@ import normalizeQuotes from '@helpers/normalizeQuotes'
 import normalizeWhitespace from '@helpers/normalizeWhitespace'
 import stripHTMLComments from '@helpers/stripHTMLComments'
 import stripHTMLEntities from '@helpers/stripHTMLEntities'
+import stripTocBlockContent from '@helpers/stripTocBlockContent'
 
 /**
  * Clean HTML strip all html entities and comments.
@@ -28,6 +29,7 @@ export function cleanHTML( text ) {
 			normalizeWhitespace,
 			stripStyle,
 			stripScript,
+			stripTocBlockContent,
 			stripHTMLComments,
 			stripHTMLEntities,
 			stripSpaces,
