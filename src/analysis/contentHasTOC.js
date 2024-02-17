@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { includes } from 'lodash'
+
+/**
  * WordPress dependencies
  */
 import { applyFilters } from '@wordpress/hooks'
@@ -36,7 +41,7 @@ class ContentHasTOC extends Analysis {
 	 */
 	getResult( paper, researcher, i18n ) {
 		const analysisResult = this.newResult( i18n )
-		const hasTOCPlugin = rankMath.assessor.hasTOCPlugin
+		const hasTOCPlugin = rankMath.assessor.hasTOCPlugin || includes( paper.getTextLower(), 'wp-block-rank-math-toc-block' )
 
 		analysisResult
 			.setScore( this.calculateScore( hasTOCPlugin ) )
@@ -48,10 +53,12 @@ class ContentHasTOC extends Analysis {
 	/**
 	 * Checks whether paper meet analysis requirements.
 	 *
+	 * @param {Paper} paper The paper to use for the assessment.
+	 *
 	 * @return {boolean} True when requirements meet.
 	 */
-	isApplicable() {
-		return rankMath.assessor.hasTOCPlugin
+	isApplicable( paper ) {
+		return paper.hasText()
 	}
 
 	/**

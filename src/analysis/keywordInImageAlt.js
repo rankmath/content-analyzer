@@ -43,7 +43,7 @@ class KeywordInImageAlt extends Analysis {
 		const thumbnailAlt = paper.getLower( 'thumbnailAlt' )
 		let keyword = paper.getLower( 'keyword' )
 
-		if ( keyword === thumbnailAlt ) {
+		if ( keyword === thumbnailAlt || includes( thumbnailAlt, keyword ) ) {
 			analysisResult
 				.setScore( this.calculateScore( true ) )
 				.setText( this.translateScore( analysisResult, i18n ) )
@@ -53,15 +53,23 @@ class KeywordInImageAlt extends Analysis {
 
 		// Remove duplicate words from keyword.
 		keyword = uniq( keyword.split( ' ' ) ).join( ' ' )
+
+		// Check if keyword is in alt text.
 		const keywordPattern = keyword.replace( /[.*+?^${}()|[\]\\]/g, '\\$&' ).replace( / /g, '.*' )
+		let regex = new RegExp( '<img[^>]*alt=[\'"]([^\'"]*)[\'"]', 'gi' )
+		const altTags = paper.getTextLower().match( regex )
+		if ( null !== altTags ) {
+			for ( let i = 0; i < altTags.length; i++ ) {
+				const altTag = altTags[ i ]
+				const altTagMatch = altTag.match( new RegExp( keywordPattern, 'gi' ) )
+				if ( null !== altTagMatch ) {
+					analysisResult
+						.setScore( this.calculateScore( true ) )
+						.setText( this.translateScore( analysisResult, i18n ) )
 
-		let regex = new RegExp( '<img[^>]*alt=[\'"][^\'"]*' + keywordPattern + '[^\'"]*[\'"]', 'gi' )
-		if ( null !== paper.getTextLower().match( regex ) || includes( paper.getLower( 'thumbnailAlt' ), keyword ) ) {
-			analysisResult
-				.setScore( this.calculateScore( true ) )
-				.setText( this.translateScore( analysisResult, i18n ) )
-
-			return analysisResult
+					return analysisResult
+				}
+			}
 		}
 
 		regex = new RegExp( '\\[gallery( [^\\]]+?)?\\]', 'ig' )
