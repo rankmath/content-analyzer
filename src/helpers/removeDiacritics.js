@@ -4,7 +4,10 @@
 import { isUndefined, forEach } from 'lodash'
 
 const diacriticsMap = {}
-forEach( rankMath.assessor.diacritics, ( value, key ) => diacriticsMap[ key ] = new RegExp( value, 'g' ) )
+if ( ! isUndefined( rankMath.assessor ) ) {
+	forEach( rankMath.assessor.diacritics, ( value, key ) => diacriticsMap[ key ] = new RegExp( value, 'g' ) )
+}
+
 export default ( text ) => {
 	if ( isUndefined( text ) ) {
 		return text
