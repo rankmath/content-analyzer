@@ -385,7 +385,7 @@ class Paper {
 			const slugify = researcher.getResearch( 'slugify' )
 			const removePunctuation = researcher.getResearch( 'removePunctuation' )
 			const keywordLower = this.getLower( 'keyword' )
-				.split( '.' ).join( '-' )
+				.replace( /\./ig, '-' )
 				.replace( "'", '' )
 				.replace( /[-_]/ig, '-' )
 
