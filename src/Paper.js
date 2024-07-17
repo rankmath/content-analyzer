@@ -385,9 +385,8 @@ class Paper {
 			const slugify = researcher.getResearch( 'slugify' )
 			const removePunctuation = researcher.getResearch( 'removePunctuation' )
 			const keywordLower = this.getLower( 'keyword' )
-				.replace( /\./ig, '-' )
-				.replace( "'", '' )
-				.replace( /[-_]/ig, '-' )
+				.replace( /\'/g, '' )
+				.replace( /[-_.]+/g, '-' )
 
 			this.keywordPermalink = slugify( removePunctuation( keywordLower ) )
 			this.keywordPermalinkRaw = this.keywordPermalink
